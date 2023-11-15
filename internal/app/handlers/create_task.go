@@ -5,17 +5,17 @@ import (
 	"fmt"
 	"io"
 	"net/http"
-	"os"
 
 	"github.com/GbSouza15/apiToDoGo/internal/app/models"
-	"github.com/golang-jwt/jwt/v5"
+	"github.com/GbSouza15/apiToDoGo/internal/app/response"
+	"github.com/GbSouza15/apiToDoGo/internal/authenticator"
 	"github.com/google/uuid"
 )
 
 func (h handler) CreateTasks(w http.ResponseWriter, r *http.Request) {
 	body, err := io.ReadAll(r.Body)
 	if err != nil {
-		SendResponse(404, []byte("Erro ao ler o corpo da requisição."), w)
+		response.SendResponse(404, []byte("Erro ao ler o corpo da requisição."), w)
 		return
 	}
 
@@ -23,46 +23,19 @@ func (h handler) CreateTasks(w http.ResponseWriter, r *http.Request) {
 	var taskId = uuid.NewString()
 
 	if err := json.Unmarshal(body, &newTask); err != nil {
-		SendResponse(500, []byte("Erro ao decodificação do JSON"), w)
+		response.SendResponse(500, []byte("Erro ao decodificação do JSON"), w)
 		return
 	}
 
-	c, err := r.Cookie("token")
-	if err != nil {
-		if err == http.ErrNoCookie {
-			SendResponse(401, []byte("Não autorizado"), w)
-			return
-		}
-		SendResponse(400, []byte("Erro no servidor"), w)
-		return
-	}
+	userId := authenticator.UserIDFromContext(r.Context())
 
-	tknStr := c.Value
-	claims := &models.Claims{}
-	secret := os.Getenv("SECRET")
-	tkn, err := jwt.ParseWithClaims(tknStr, claims, func(t *jwt.Token) (interface{}, error) {
-		return []byte(secret), nil
-	})
-	if err != nil {
-		if err == jwt.ErrSignatureInvalid {
-			SendResponse(401, []byte("Não autorizado"), w)
-			return
-		}
-		SendResponse(400, []byte("Erro no servidor"), w)
-		return
-	}
-	if !tkn.Valid {
-		SendResponse(401, []byte("Não autorizado"), w)
-		return
-	}
-
-	_, err = h.DB.Exec("INSERT INTO tdlist.tasks (id, title, description, user_id) VALUES ($1, $2, $3, $4)", taskId, newTask.Title, newTask.Description, claims.UserId)
+	_, err = h.DB.Exec("INSERT INTO tdlist.tasks (id, title, description, user_id) VALUES ($1, $2, $3, $4)", taskId, newTask.Title, newTask.Description, userId)
 	if err != nil {
 		fmt.Println(err)
 		fmt.Println(newTask)
-		SendResponse(500, []byte("Erro ao criar tarefa."), w)
+		response.SendResponse(500, []byte("Erro ao criar tarefa."), w)
 		return
 	}
 
-	SendResponse(201, []byte("Tarefa criada com sucesso."), w)
+	response.SendResponse(201, []byte("Tarefa criada com sucesso."), w)
 }
