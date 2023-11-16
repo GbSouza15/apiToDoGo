@@ -19,6 +19,8 @@ func (h handler) CreateTasks(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
+	defer r.Body.Close()
+
 	var newTask models.TaskCreate
 	var taskId = uuid.NewString()
 

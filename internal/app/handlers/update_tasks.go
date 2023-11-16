@@ -20,6 +20,7 @@ func (h handler) UpdateTasks(w http.ResponseWriter, r *http.Request) {
 		response.SendResponse(500, []byte("Error reading the request body"), w)
 		return
 	}
+	defer r.Body.Close()
 
 	var updateTask models.Task
 

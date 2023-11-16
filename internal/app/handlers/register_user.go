@@ -19,6 +19,7 @@ func (h handler) RegisterUserHandler(w http.ResponseWriter, r *http.Request) {
 		fmt.Println(err.Error())
 		return
 	}
+	defer r.Body.Close()
 
 	var newUser models.User
 	userId := uuid.NewString()

@@ -3,6 +3,7 @@ package handlers
 import (
 	"database/sql"
 	"encoding/json"
+	"github.com/golang-jwt/jwt/v5"
 	"io"
 	"net/http"
 	"os"
@@ -10,7 +11,6 @@ import (
 
 	"github.com/GbSouza15/apiToDoGo/internal/app/models"
 	"github.com/GbSouza15/apiToDoGo/internal/app/response"
-	"github.com/golang-jwt/jwt/v5"
 	"golang.org/x/crypto/bcrypt"
 )
 
@@ -22,6 +22,7 @@ func (h handler) LoginUserHandler(w http.ResponseWriter, r *http.Request) {
 	if err != nil {
 		response.SendResponse(500, []byte("Error logging in"), w)
 	}
+	defer r.Body.Close()
 
 	if err := json.Unmarshal(body, &userLogin); err != nil {
 		response.SendResponse(500, []byte("JSON decoding error"), w)
