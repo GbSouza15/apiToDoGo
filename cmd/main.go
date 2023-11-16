@@ -12,7 +12,7 @@ import (
 func main() {
 	db, err := database.InitDb()
 	if err != nil {
-		fmt.Printf("Erro ao iniciar o banco de dados, %v", err.Error())
+		fmt.Printf("Error starting the database, %v", err.Error())
 		os.Exit(1)
 	}
 
@@ -20,7 +20,7 @@ func main() {
 
 	err = schema.CreateSchemaAndTable(db)
 	if err != nil {
-		fmt.Printf("Erro no schema: %v", err)
+		fmt.Printf("Schema error: %v", err)
 	}
 
 	err = database.CreateTables(db)
@@ -31,7 +31,7 @@ func main() {
 
 	err = routers.RoutesApi(db)
 	if err != nil {
-		fmt.Printf("Erro ao iniciar o servidor: %v", err)
+		fmt.Printf("Error starting the server: %v", err)
 		os.Exit(1)
 	}
 }

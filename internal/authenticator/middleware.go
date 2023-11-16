@@ -26,10 +26,10 @@ func CheckTokenIsValid(n http.HandlerFunc) http.HandlerFunc {
 		c, err := r.Cookie("token")
 		if err != nil {
 			if err == http.ErrNoCookie {
-				response.SendResponse(401, []byte("Não autorizado"), w)
+				response.SendResponse(401, []byte("Unauthorized"), w)
 				return
 			}
-			response.SendResponse(400, []byte("Erro no servidor"), w)
+			response.SendResponse(400, []byte("Server error"), w)
 			return
 		}
 
@@ -37,18 +37,18 @@ func CheckTokenIsValid(n http.HandlerFunc) http.HandlerFunc {
 		token, err := ValidatorToken(tokenString)
 
 		if err != nil {
-			response.SendResponse(400, []byte("Erro no servidor"), w)
+			response.SendResponse(400, []byte("Server error"), w)
 			return
 		}
 
 		if !token.Valid {
-			response.SendResponse(401, []byte("Não autorizado"), w)
+			response.SendResponse(401, []byte("Unauthorized"), w)
 			return
 		}
 
 		claims, ok := token.Claims.(jwt.MapClaims)
 		if !ok || !token.Valid {
-			response.SendResponse(401, []byte("Não autorizado"), w)
+			response.SendResponse(401, []byte("Unauthorized"), w)
 			return
 		}
 

@@ -17,24 +17,24 @@ func (h handler) UpdateTasks(w http.ResponseWriter, r *http.Request) {
 
 	body, err := io.ReadAll(r.Body)
 	if err != nil {
-		response.SendResponse(500, []byte("Erro ao ler o corpo da requisição"), w)
+		response.SendResponse(500, []byte("Error reading the request body"), w)
 		return
 	}
 
 	var updateTask models.Task
 
 	if err := json.Unmarshal(body, &updateTask); err != nil {
-		response.SendResponse(500, []byte("Erro ao decodificação do JSON"), w)
+		response.SendResponse(500, []byte("Error decoding JSON"), w)
 		return
 	}
 
 	_, err = h.DB.Exec("UPDATE tdlist.tasks SET title = $1, description = $2 WHERE id = $3", updateTask.Title, updateTask.Description, taskId)
 	if err != nil {
-		response.SendResponse(500, []byte("Erro ao atualizar a tarefa."), w)
+		response.SendResponse(500, []byte("Error updating the task."), w)
 		fmt.Println(err)
 		return
 	}
 
-	response.SendResponse(200, []byte("Tarefa atualizada com sucesso"), w)
+	response.SendResponse(200, []byte("Task updated successfully"), w)
 
 }

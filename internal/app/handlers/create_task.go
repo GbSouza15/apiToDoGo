@@ -15,7 +15,7 @@ import (
 func (h handler) CreateTasks(w http.ResponseWriter, r *http.Request) {
 	body, err := io.ReadAll(r.Body)
 	if err != nil {
-		response.SendResponse(404, []byte("Erro ao ler o corpo da requisição."), w)
+		response.SendResponse(404, []byte("Error reading the request body."), w)
 		return
 	}
 
@@ -23,7 +23,7 @@ func (h handler) CreateTasks(w http.ResponseWriter, r *http.Request) {
 	var taskId = uuid.NewString()
 
 	if err := json.Unmarshal(body, &newTask); err != nil {
-		response.SendResponse(500, []byte("Erro ao decodificação do JSON"), w)
+		response.SendResponse(500, []byte("Error decoding the JSON"), w)
 		return
 	}
 
@@ -33,9 +33,9 @@ func (h handler) CreateTasks(w http.ResponseWriter, r *http.Request) {
 	if err != nil {
 		fmt.Println(err)
 		fmt.Println(newTask)
-		response.SendResponse(500, []byte("Erro ao criar tarefa."), w)
+		response.SendResponse(500, []byte("Error on create task."), w)
 		return
 	}
 
-	response.SendResponse(201, []byte("Tarefa criada com sucesso."), w)
+	response.SendResponse(201, []byte("Task created successfully."), w)
 }
