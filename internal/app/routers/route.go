@@ -20,6 +20,8 @@ func RoutesApi(db *sql.DB) error {
 	r.HandleFunc("/register", h.RegisterUserHandler).Methods(http.MethodPost)
 	r.HandleFunc("/login", h.LoginUserHandler).Methods(http.MethodPost)
 	r.HandleFunc("/tasks/new", authenticator.CheckTokenIsValid(h.CreateTasks)).Methods(http.MethodPost)
+	// PUT
+	r.HandleFunc("/tasks/update/{taskId}", authenticator.CheckTokenIsValid(h.UpdateTasks))
 	// DELETE
 	r.HandleFunc("/{taskId}/task/delete", authenticator.CheckTokenIsValid(h.DeleteTask)).Methods(http.MethodDelete)
 
