@@ -15,7 +15,7 @@ func (h handler) GetTasksForUserHandler(w http.ResponseWriter, r *http.Request) 
 
 	res, err := h.DB.Query("SELECT id, title, description FROM tdlist.tasks WHERE user_id = $1", userId)
 	if err != nil {
-		response.SendResponse(500, []byte("Erro ao buscar tarefas"), w)
+		response.SendResponse(500, []byte("Error fetching tasks"), w)
 		return
 	}
 
@@ -33,7 +33,7 @@ func (h handler) GetTasksForUserHandler(w http.ResponseWriter, r *http.Request) 
 
 	responseJSON, err := json.Marshal(tasks)
 	if err != nil {
-		response.SendResponse(500, []byte("Erro ao converter para JSON"), w)
+		response.SendResponse(500, []byte("Error converting to JSON"), w)
 		return
 	}
 

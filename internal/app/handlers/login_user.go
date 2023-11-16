@@ -20,26 +20,26 @@ func (h handler) LoginUserHandler(w http.ResponseWriter, r *http.Request) {
 
 	body, err := io.ReadAll(r.Body)
 	if err != nil {
-		response.SendResponse(500, []byte("Erro ao fazer o login"), w)
+		response.SendResponse(500, []byte("Error logging in"), w)
 	}
 
 	if err := json.Unmarshal(body, &userLogin); err != nil {
-		response.SendResponse(500, []byte("Erro na decodificação do json"), w)
+		response.SendResponse(500, []byte("JSON decoding error"), w)
 		return
 	}
 
 	err = h.DB.QueryRow("SELECT * FROM tdlist.users WHERE email = $1", userLogin.Email).Scan(&user.ID, &user.Name, &user.Email, &user.Password)
 	if err != nil {
 		if err == sql.ErrNoRows {
-			response.SendResponse(404, []byte("Nenhum registro desse usuário"), w)
+			response.SendResponse(404, []byte("No record of this user"), w)
 			return
 		}
-		response.SendResponse(401, []byte("Erro no servidor"), w)
+		response.SendResponse(401, []byte("Server error"), w)
 		return
 	}
 
 	if err := bcrypt.CompareHashAndPassword([]byte(user.Password), []byte(userLogin.Password)); err != nil {
-		response.SendResponse(401, []byte("Senha incorreta"), w)
+		response.SendResponse(401, []byte("Incorrect password"), w)
 		return
 	}
 
@@ -50,14 +50,14 @@ func (h handler) LoginUserHandler(w http.ResponseWriter, r *http.Request) {
 	secret := os.Getenv("SECRET")
 	tokenString, err := token.SignedString([]byte(secret))
 	if err != nil {
-		response.SendResponse(500, []byte("Erro ao gerar o token"), w)
+		response.SendResponse(500, []byte("Error generating the token"), w)
 		return
 	}
 
 	tokenResponse := map[string]string{"token": tokenString}
 	responseJSON, err := json.Marshal(tokenResponse)
 	if err != nil {
-		response.SendResponse(500, []byte("Erro ao codificar o JSON"), w)
+		response.SendResponse(500, []byte("Error encoding the JSON"), w)
 		return
 	}
 

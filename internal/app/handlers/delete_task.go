@@ -13,9 +13,9 @@ func (h handler) DeleteTask(w http.ResponseWriter, r *http.Request) {
 
 	_, err := h.DB.Exec("DELETE FROM tdlist.tasks WHERE id = $1", taskId)
 	if err != nil {
-		response.SendResponse(500, []byte("Erro ao deletar tarefa"), w)
+		response.SendResponse(500, []byte("Error deleting task"), w)
 		return
 	}
 
-	response.SendResponse(200, []byte("Tarefa deletada com sucesso"), w)
+	response.SendResponse(200, []byte("Task deleted successfully"), w)
 }

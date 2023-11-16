@@ -53,12 +53,12 @@ func CreateTables(db *sql.DB) error {
 
 	_, err := db.Exec(createUserTable)
 	if err != nil {
-		return fmt.Errorf("erro ao criar tabela User: %s", err.Error())
+		return fmt.Errorf("Error creating the User table: %s", err.Error())
 	}
 
 	_, err = db.Exec(createTaskTable)
 	if err != nil {
-		return fmt.Errorf("erro ao criar tabela Task: %s", err.Error())
+		return fmt.Errorf("Error creating the Task table: %s", err.Error())
 	}
 
 	return nil
