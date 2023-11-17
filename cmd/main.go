@@ -18,16 +18,10 @@ func main() {
 
 	defer db.Close()
 
-	err = schema.CreateSchemaAndTable(db)
+	err = schema.CreateSchema(db)
 	if err != nil {
 		fmt.Printf("Schema error: %v", err)
 	}
-
-	//err = database.CreateTables(db)
-	//if err != nil {
-	//	fmt.Println(err)
-	//	os.Exit(1)
-	//}
 
 	err = routers.RoutesApi(db)
 	if err != nil {

@@ -31,35 +31,3 @@ func InitDb() (*sql.DB, error) {
 	fmt.Println("Database connected!")
 	return db, nil
 }
-
-//func CreateTables(db *sql.DB) error {
-//	createUserTable := `
-//		CREATE TABLE IF NOT EXISTS tdlist.users (
-//			id UUID PRIMARY KEY,
-//			name VARCHAR(255) NOT NULL,
-//			email VARCHAR(255) NOT NULL,
-//			password VARCHAR(255) NOT NULL
-//		);
-//	`
-//
-//	createTaskTable := `
-//		CREATE TABLE IF NOT EXISTS tdlist.tasks (
-//			id UUID PRIMARY KEY,
-//			title VARCHAR(255) NOT NULL,
-//			description VARCHAR(255) NOT NULL,
-//			user_id UUID REFERENCES tdlist.users(id)
-//		);
-//	`
-//
-//	_, err := db.Exec(createUserTable)
-//	if err != nil {
-//		return fmt.Errorf("Error creating the User table: %s", err.Error())
-//	}
-//
-//	_, err = db.Exec(createTaskTable)
-//	if err != nil {
-//		return fmt.Errorf("Error creating the Task table: %s", err.Error())
-//	}
-//
-//	return nil
-//}

@@ -6,7 +6,7 @@ import (
 	"os"
 )
 
-func CreateSchemaAndTable(db *sql.DB) error {
+func CreateSchema(db *sql.DB) error {
 	var schemaName = os.Getenv("SCHEMA")
 	var createSchemaStr = fmt.Sprintf("CREATE SCHEMA IF NOT EXISTS %s", schemaName)
 
