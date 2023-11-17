@@ -3,6 +3,7 @@ package handlers
 import (
 	"database/sql"
 	"encoding/json"
+	"fmt"
 	"github.com/golang-jwt/jwt/v5"
 	"io"
 	"net/http"
@@ -39,8 +40,12 @@ func (h handler) LoginUserHandler(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
+	fmt.Println(user)
+	fmt.Println(userLogin)
+
 	if err := bcrypt.CompareHashAndPassword([]byte(user.Password), []byte(userLogin.Password)); err != nil {
 		response.SendResponse(401, []byte("Incorrect password"), w)
+		fmt.Println(err)
 		return
 	}
 
