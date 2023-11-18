@@ -40,9 +40,6 @@ func (h handler) LoginUserHandler(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	fmt.Println(user)
-	fmt.Println(userLogin)
-
 	if err := bcrypt.CompareHashAndPassword([]byte(user.Password), []byte(userLogin.Password)); err != nil {
 		response.SendResponse(401, []byte("Incorrect password"), w)
 		fmt.Println(err)

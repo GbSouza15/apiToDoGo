@@ -2,7 +2,6 @@ package handlers
 
 import (
 	"encoding/json"
-	"fmt"
 	"io"
 	"net/http"
 
@@ -33,8 +32,6 @@ func (h handler) CreateTasks(w http.ResponseWriter, r *http.Request) {
 
 	_, err = h.DB.Exec("INSERT INTO tdlist.tasks (id, title, description, user_id) VALUES ($1, $2, $3, $4)", taskId, newTask.Title, newTask.Description, userId)
 	if err != nil {
-		fmt.Println(err)
-		fmt.Println(newTask)
 		response.SendResponse(500, []byte("Error on create task."), w)
 		return
 	}
